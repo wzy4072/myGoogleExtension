@@ -1,0 +1,22 @@
+{
+    "manifest_version": 2,
+    "name": "mydemo",
+    "version": "1.0.0",
+    "description": "pageAction",
+    "icons": {
+        "16": "images/icon.png",
+        "48": "images/icon.png",
+        "128": "images/icon.png"
+    },
+    "page_action": {
+        "default_icon": "images/icon.png",
+        "default_title": "这是 特定页面才能打开的",
+        "default_popup": "popup.html"
+    },
+    "permissions": [
+        "declarativeContent"
+    ],
+    "background": {
+        "scripts": ["js/background.js"]
+    }
+}
