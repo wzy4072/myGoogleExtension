@@ -1,22 +1,37 @@
 {
     "manifest_version": 2,
     "name": "mydemo",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "pageAction",
     "icons": {
         "16": "images/icon.png",
         "48": "images/icon.png",
         "128": "images/icon.png"
     },
-    "page_action": {
+    "browser_action": {
         "default_icon": "images/icon.png",
-        "default_title": "这是 特定页面才能打开的",
+        "default_title": "this is AY's extension",
         "default_popup": "popup.html"
     },
-    "permissions": [
-        "declarativeContent"
+    "content_scripts": [
+        {
+            "matches": [
+                "<all_urls>"
+            ],
+            "js": [
+                "js/tools.js",
+                "js/content-script.js"
+            ],
+            "css": [
+                "css/mywindow.css"
+            ],
+            "run_at": "document_start"
+        }
     ],
     "background": {
-        "scripts": ["js/background.js"]
-    }
+        "scripts": [
+            "js/background.js"
+        ]
+    },
+    "permissions": [ "webRequest", "webRequestBlocking", "http://192.168.1.21:8033/*" ]
 }
