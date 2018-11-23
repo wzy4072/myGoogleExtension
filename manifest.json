@@ -1,12 +1,17 @@
 {
     "manifest_version": 2,
     "name": "mydemo",
-    "version": "1.0.1",
-    "description": "pageAction",
+    "version": "1.0.2",
+    "description": "逻辑列队执行",
     "icons": {
         "16": "images/icon.png",
         "48": "images/icon.png",
         "128": "images/icon.png"
+    },
+    "background": {
+        "scripts": [
+            "js/background.js"
+        ]
     },
     "browser_action": {
         "default_icon": "images/icon.png",
@@ -19,19 +24,20 @@
                 "<all_urls>"
             ],
             "js": [
+                "js/jq3.3.1.js",
                 "js/tools.js",
                 "js/content-script.js"
-            ],
-            "css": [
-                "css/mywindow.css"
             ],
             "run_at": "document_start"
         }
     ],
-    "background": {
-        "scripts": [
-            "js/background.js"
-        ]
-    },
-    "permissions": [ "webRequest", "webRequestBlocking", "http://192.168.1.21:8033/*" ]
+    "permissions": [
+        "tabs",
+        "notifications",
+        "webRequest",
+        "webRequestBlocking",
+        "storage",
+        "http://192.168.1.21:8033/*"
+    ],
+    "homepage_url": "https://www.baidu.com"
 }

@@ -21,27 +21,30 @@
         .item:hover {
             background-color: #efefef;
         }
-
+        .cl {
+            cursor: pointer;
+        }
         .cr {
             float: right;
             color: #aaa;
         }
-
         .itemline {
             border-bottom: 1px solid #efefef;
         }
     </style>
+
 </head>
 
 <body>
     <div id="warp">
-        <div class="item"><span class="cl">打开新窗口(T)</span><span class="cr">⌘T</span></div>
-        <div class="item"><span class="cl">打开隐身模式(M)</span><span class="cr">⌘T</span></div>
-        <div class="item"><span class="cl">打开下载(J)</span><span class="cr">⌘T</span></div>
+        <div id="start"><span class="cl">开始</span></div>
+        <div id="stop"><span class="cl">停止</span></div>
         <div class="itemline"></div>
-        <div class="item"><span class="cl">历史记录(H)</span><span class="cr">⌘T</span></div>
-        <div class="item"><span class="cl">书签(B)</span><span class="cr">⌘T</span></div>
+        <div class="item"><span class="cl">XXX(H)</span><span class="cr">⌘T</span></div>
+        <div class="item"><span class="cl">XXX(B)</span><span class="cr">⌘T</span></div>
     </div>
 </body>
+<script type="text/javascript" src="js/jq3.3.1.js"></script>
+<script type="text/javascript" src="js/popup.js"></script>
 
 </html>
