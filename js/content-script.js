@@ -1,4 +1,52 @@
-// console.log('this is content-script')
+console.log('this is content-script')
+
+var localBase = {}
+
+chrome.storage.local.get('runHz', function (result) {
+    localBase = Object.assign(result)
+    console.log(JSON.stringify(localBase))
+    showMessage({ title: '初始化情况', message: '本地数据 获取完毕' + JSON.stringify(localBase) })
+});
+
+// 监听消息（来自 popup.js）
+// chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+//     alert(2)
+//     // if (request.start) {
+//     //     run()
+//     // } else {
+//     //     stop()
+//     // }
+//     sendResponse('来自content的回复！');
+// });
+chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+    if(request.start){
+        run()
+    }else{
+        stop()
+    }
+    sendResponse('我收到了你的消息！');
+});
+
+
+// 运行
+function run() {
+    alert(1)
+    // showMessage({ title: '启动成功！' })
+    // chrome.notifications.create(null, {
+    //     type: 'basic',
+    //     iconUrl: '../images/icon.png',
+    //     title: 2,
+    //     message: 3
+    // });
+}
+function stop() {
+
+}
+
+
+
+
+
 
 // 桌面消息通知
 // chrome.notifications.create(null, {
@@ -10,15 +58,24 @@
 // });
 
 
-chrome.storage.sync.set({color: color, showImage: showImage}, function() {
-    // 注意新版的options页面alert不生效！
-    // alert('保存成功！');
-    document.getElementById('status').textContent = '保存成功！';
-    setTimeout(() => {document.getElementById('status').textContent = '';}, 800);
-});
+// chrome.storage.sync.set({color: color, showImage: showImage}, function() {
+//     // 注意新版的options页面alert不生效！
+//     // alert('保存成功！');
+//     document.getElementById('status').textContent = '保存成功！';
+//     setTimeout(() => {document.getElementById('status').textContent = '';}, 800);
+// });
 
 
+// function storageBus() {
+//     let sa = { 'hz':12 }
+//     chrome.storage.sync.set({color: color, showImage: showImage}, function () {
+//         // 读取值
+//         chrome.storage.sync.get('hz', function (item) {
+//             console.log(item)
+//         });
 
+//     })
+// }
 
 
 

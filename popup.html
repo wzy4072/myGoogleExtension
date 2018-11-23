@@ -31,17 +31,32 @@
         .itemline {
             border-bottom: 1px solid #efefef;
         }
+        .switchbody {
+            transition:all 0.3s;
+            overflow: hidden;
+            height: 0px;
+            padding:0px;
+        }
     </style>
 
 </head>
 
 <body>
     <div id="warp">
-        <div id="start"><span class="cl">开始</span></div>
-        <div id="stop"><span class="cl">停止</span></div>
+        <div class="item" id="start"><span class="cl">开始</span></div>
+        <div class="item" id="stop"><span class="cl">停止</span></div>
         <div class="itemline"></div>
-        <div class="item"><span class="cl">XXX(H)</span><span class="cr">⌘T</span></div>
-        <div class="item"><span class="cl">XXX(B)</span><span class="cr">⌘T</span></div>
+        <div class="item test1"><span class="cl">1</span></div>
+        <div class="item test2"><span class="cl">1</span></div>
+        <div class="item normalset-btn"><span class="cl">设置</span></div>
+        <div class="item normalset switchbody">
+            <input value="" class="hz" placeholder="请输入更新频率">
+            <span class="cr updata-hz">更新</span>
+        </div>
+        <div class="item setup-btn"><span class="cl">高级设置</div>
+        <div class="item setup switchbody">
+            <span class="cr">施工中</span>
+        </div>
     </div>
 </body>
 <script type="text/javascript" src="js/jq3.3.1.js"></script>
