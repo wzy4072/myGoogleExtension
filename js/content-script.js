@@ -1,185 +1,77 @@
-console.log('this is content-script')
-
-var localBase = {}
-
-chrome.storage.local.get('runHz', function (result) {
-    localBase = Object.assign(result)
-    console.log(JSON.stringify(localBase))
-    showMessage({ title: '初始化情况', message: '本地数据 获取完毕' + JSON.stringify(localBase) })
+document.addEventListener('DOMContentLoaded', function () {
+    console.log('我被执行了！');
 });
+var tipCount = 0;
+// 简单的消息通知
+function tip(info) {
+    info = info || '';
+    var ele = document.createElement('div');
+    ele.className = 'chrome-plugin-simple-tip slideInLeft';
+    ele.style.top = tipCount * 70 + 20 + 'px';
+    ele.innerHTML = `<div>${info}</div>`;
+    document.body.appendChild(ele);
+    ele.classList.add('animated');
+    tipCount++;
+    setTimeout(() => {
+        ele.style.top = '-100px';
+        setTimeout(() => {
+            ele.remove();
+            tipCount--;
+        }, 400);
+    }, 3000);
+}
 
-// 监听消息（来自 popup.js）
-// chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-//     alert(2)
-//     // if (request.start) {
-//     //     run()
-//     // } else {
-//     //     stop()
-//     // }
-//     sendResponse('来自content的回复！');
-// });
+var searchList = []
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-    if(request.start){
-        run()
-    }else{
-        stop()
+    if (request.start) {
+        chrome.storage.local.get('baselimt', function (result) {
+            searchList = result.baselimt
+            tip('筛选条件：' + JSON.stringify(result.baselimt))
+            console.log('此次筛选，条件是：', JSON.stringify(result.baselimt))
+            runExtension()
+        })
+    } else {
+        stopExtension()
     }
-    sendResponse('我收到了你的消息！');
 });
 
+var intervalIndex = 0
+var resquestCount = 0
 
-// 运行
-function run() {
-    alert(1)
-    // showMessage({ title: '启动成功！' })
-    // chrome.notifications.create(null, {
-    //     type: 'basic',
-    //     iconUrl: '../images/icon.png',
-    //     title: 2,
-    //     message: 3
-    // });
+// 启动运行
+function runExtension() {
+    intervalIndex = setInterval(function () {
+        $.ajax({
+            url: 'http://99task.club/tasks/task/taskhall',
+            type: 'GET',
+            data: null,
+            xhrFields: { withCredentials: true },
+            success: function (res) {
+                checkRes(res)
+                resquestCount++
+                console.log('请求次数统计：', resquestCount)
+            }
+        })
+
+    }, 5000)
 }
-function stop() {
 
+function checkRes(res) {
+    if (searchList.length !== 0) {
+        let haveAll = true
+        searchList.map(item => {
+            if (res.indexOf(item) === -1) {
+                haveAll = false
+            }
+        })
+        if (haveAll) {
+            chrome.runtime.sendMessage({ message: '有单啦！' }, function (response) { });
+        }
+    } else {
+        console.log('没有限制条件！ 无意义')
+    }
 }
-
-
-
-
-
-
-// 桌面消息通知
-// chrome.notifications.create(null, {
-//     type: 'image',
-//     iconUrl: 'img/icon.png',
-//     title: '祝福',
-//     message: '骚年，祝你圣诞快乐！Merry christmas!',
-//     imageUrl: 'img/sds.png'
-// });
-
-
-// chrome.storage.sync.set({color: color, showImage: showImage}, function() {
-//     // 注意新版的options页面alert不生效！
-//     // alert('保存成功！');
-//     document.getElementById('status').textContent = '保存成功！';
-//     setTimeout(() => {document.getElementById('status').textContent = '';}, 800);
-// });
-
-
-// function storageBus() {
-//     let sa = { 'hz':12 }
-//     chrome.storage.sync.set({color: color, showImage: showImage}, function () {
-//         // 读取值
-//         chrome.storage.sync.get('hz', function (item) {
-//             console.log(item)
-//         });
-
-//     })
-// }
-
-
-
-// var rl_Global = {
-//     intervalIndex: 0,
-//     runNumber: 0
-// }
-
-// // 获取普通设置
-// function getOptions() {
-//     // 频率 5秒钟一次
-//     return { frequency: 5000, totle: 0, }
-// }
-// // 获取高级设置
-// function getAdvancedSetup() {
-//     return [
-//         {
-//             stepNo: '1',
-//             stepName: '查询任务列表', 
-//             method: 'get', 
-//             url: 'http://99shou.cn/tasks/task/info/taskInfo?page=1&limit=10&classificationId=&platformId=&tasktypeId=', 
-//             data:null,
-//             cb: function (res) {
-//                 console.log(res)
-//                 return true
-//             }
-//         },
-//     ]
-
-// }
-// let options = getOptions()
-// let advanceOptions = getAdvancedSetup()
-// // 初始化运行队列
-// function initSteps() {
-//     let promises = []
-//     advanceOptions.map(item => {
-//         let p = () => {
-//             return new Promise((resolve, reject) => {
-//                 $.ajax({
-//                     url: item.url,
-//                     type: item.method,
-//                     data: JSON.stringify(item.data),
-//                     xhrFields:{withCredentials: true},
-//                     beforeSend: function (request) {
-//                         request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-//                         request.setRequestHeader("Host", window.location.host);
-//                         request.setRequestHeader("Referer", window.location.href);
-//                     },
-//                     success: function (res) {
-//                         if (item.cb) {
-//                             if (item.cb(res)) {
-//                                 resolve(res)
-//                             } else {
-//                                 reject({ error: 'callback方法返回false' })
-//                             }
-//                         } else {
-//                             resolve(res)
-//                         }
-//                     }
-//                 })
-//             })
-//         }
-//         promises.push(p)
-//     })
-//     return promises
-// }
-
-// // 队列运行方法
-// function runPromise(pros, idx = 0) {
-//     if (!pros || !pros.length) { return false }
-//     let pro = pros[idx]
-//     pro().then(res => {
-//         if (res.id) {
-//             idx++
-//             if (idx === pros.length) {
-//                 rl_Global.runNumber++
-//                 console.log(rl_Global.runNumber, '执行完毕！')
-//                 return false
-//             }
-//             runPromise(pros, idx)
-//         }
-//     })
-// }
-
-// // 启动运行
-// function runExtension() {
-//     console.log('启动运行')
-//     let promises = initSteps()
-//     rl_Global.intervalIndex = setInterval(function () {
-//         runPromise(promises)
-//     }, options.frequency)
-// }
-
-// // 停止运行
-// function stopExtension() {
-//     clearInterval(rl_Global.intervalIndex)
-// }
-
-// chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-//     if (request.start) {
-//         runExtension()
-//     } else {
-//         stopExtension()
-//     }
-//     console.log('收到请求', request.message);
-//     sendResponse('content-secript 收到请求');
-// });
+// 停止运行
+function stopExtension() {
+    clearInterval(intervalIndex)
+}

@@ -1,27 +1,12 @@
-chrome.storage.local.get('runHz', function (result) {
-    localBase = Object.assign(result)
-    console.log(JSON.stringify(localBase))
-    showMessage({ title: '初始化情况', message: '本地数据 获取完毕' + JSON.stringify(localBase) })
+// 监听来自content-script的消息
+chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+    chrome.notifications.create(null, {
+        type: 'basic',
+        iconUrl: '../images/icon.png',
+        title: 'message!',
+        message: 'ring ring ring !'
+    });
+    console.log('收到来自content-script的消息：');
+    console.log(request, sender, sendResponse);
+    sendResponse('我是后台，我已收到你的消息：' + JSON.stringify(request));
 });
-
-function showMessage(p) {
-    chrome.notifications.create(null, {
-        type: 'basic',
-        iconUrl: '../images/icon.png',
-        title: p.title || '',
-        message: p.message || ''
-    });
-}
-
-
-
-// 运行
-function backgroundRun() {
-
-    chrome.notifications.create(null, {
-        type: 'basic',
-        iconUrl: '../images/icon.png',
-        title: '2',
-        message: '3'
-    });
-}

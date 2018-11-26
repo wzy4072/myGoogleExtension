@@ -6,60 +6,52 @@
     <meta charset="utf-8" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <style>
-        #warp {
-            width: 346px;
-            font-size: 13px;
-        }
-
-        .item {
-            cursor: pointer;
-            padding: 6px 20px;
-            width: 100%;
-            margin-left: -20px;
-        }
-
-        .item:hover {
+        .row{
             background-color: #efefef;
+    height: 22px;
+    color: #333;
+    line-height: 22px;
+    margin: 2px 0;
+    cursor: pointer;
+    padding: 4px 8px;
+    width: 160px;
         }
-        .cl {
-            cursor: pointer;
-        }
-        .cr {
-            float: right;
-            color: #aaa;
-        }
-        .itemline {
-            border-bottom: 1px solid #efefef;
-        }
-        .switchbody {
-            transition:all 0.3s;
-            overflow: hidden;
-            height: 0px;
-            padding:0px;
-        }
+        .row input {
+    border: none;
+    height: 18px;
+    padding: 2px 6px;
+    margin: 0;
+    width: 120px
+}
+
+.ay-button{
+    display: inline-block;
+    height: 100%;
+    width:20px;
+    min-height: 16px;
+}
+span.ay-button:hover {
+    color: red;
+}
     </style>
 
 </head>
 
 <body>
-    <div id="warp">
-        <div class="item" id="start"><span class="cl">开始</span></div>
-        <div class="item" id="stop"><span class="cl">停止</span></div>
-        <div class="itemline"></div>
-        <div class="item test1"><span class="cl">1</span></div>
-        <div class="item test2"><span class="cl">1</span></div>
-        <div class="item normalset-btn"><span class="cl">设置</span></div>
-        <div class="item normalset switchbody">
-            <input value="" class="hz" placeholder="请输入更新频率">
-            <span class="cr updata-hz">更新</span>
-        </div>
-        <div class="item setup-btn"><span class="cl">高级设置</div>
-        <div class="item setup switchbody">
-            <span class="cr">施工中</span>
+    <div id="app">
+        <div>
+            <div class="row" @click="start">START</div>
+            <div class="row" @click="stop">STOP</div>
+            <div class="row" v-for="(index,item) in searchList" :key="'key' + index"><input v-model="item"> <span class="ay-button"
+                    @click="minus(index)">-</span></div>
+            <div class="row" class="ay-button" @click="add">+</div>
+            <div class="row" @click="save">SAVE</div>
+            <div class="row" @click="show">SHOW</div>
         </div>
     </div>
 </body>
 <script type="text/javascript" src="js/jq3.3.1.js"></script>
+<script type="text/javascript" src="js/vue.1.0.28-csp.js"></script>
 <script type="text/javascript" src="js/popup.js"></script>
 
 </html>

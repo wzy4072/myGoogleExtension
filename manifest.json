@@ -25,8 +25,11 @@
             ],
             "js": [
                 "js/jq3.3.1.js",
-                "js/tools.js",
+                "js/vue.1.0.28-csp.js",
                 "js/content-script.js"
+            ],
+            "css": [
+                "css/custom.css"
             ],
             "run_at": "document_start"
         }
