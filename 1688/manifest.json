@@ -1,0 +1,45 @@
+{
+	"manifest_version": 2,
+    "name": "auto_coyp_1688",
+    "version": "1.0.0",
+    "description": " help add goods,auto input goods info form 1688 to ali",
+    "icons": {
+        "16": "img/icon.png",
+        "48": "img/icon.png",
+        "128": "img/icon.png"
+    },
+    "background": {
+        "page": "background.html"
+
+
+    },
+    "browser_action": {
+        "default_icon": "img/icon.png",
+        "default_title": "上新小助手",
+        "default_popup": "popup.html"
+    },  
+    "content_scripts": [
+        {
+            "matches": [
+                "<all_urls>"
+            ],
+            "js": [
+                "js/content.js"
+            ],
+            "css": [
+                "css/content.css"
+            ],
+            "run_at": "document_start"
+        }
+    ],
+    "permissions": [
+        "contextMenus",
+        "tabs",
+        "notifications",
+        "webRequest",
+        "webRequestBlocking",
+        "storage",
+        "http://*/*",
+        "https://*/*"
+    ]
+}
