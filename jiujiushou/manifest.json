@@ -1,8 +1,8 @@
 {
     "manifest_version": 2,
-    "name": "mydemo",
+    "name": "ay_listening",
     "version": "1.0.2",
-    "description": "逻辑列队执行",
+    "description": "玖玖收下单监听",
     "icons": {
         "16": "images/icon.png",
         "48": "images/icon.png",
@@ -15,7 +15,7 @@
     },
     "browser_action": {
         "default_icon": "images/icon.png",
-        "default_title": "this is AY's extension",
+        "default_title": "玖玖收",
         "default_popup": "popup.html"
     },
     "content_scripts": [

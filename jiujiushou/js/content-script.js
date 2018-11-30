@@ -1,7 +1,5 @@
-document.addEventListener('DOMContentLoaded', function () {
-    console.log('我被执行了！');
-});
 var tipCount = 0;
+
 // 简单的消息通知
 function tip(info) {
     info = info || '';
@@ -18,16 +16,18 @@ function tip(info) {
             ele.remove();
             tipCount--;
         }, 400);
-    }, 3000);
+    }, 5000);
 }
 
 var searchList = []
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     if (request.start) {
         chrome.storage.local.get('baselimt', function (result) {
+            if (isRunning) {
+                stopExtension()
+            }
             searchList = result.baselimt
             tip('筛选条件：' + JSON.stringify(result.baselimt))
-            console.log('此次筛选，条件是：', JSON.stringify(result.baselimt))
             runExtension()
         })
     } else {
@@ -37,9 +37,11 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 
 var intervalIndex = 0
 var resquestCount = 0
+var isRunning = false
 
 // 启动运行
 function runExtension() {
+    isRunning = true
     intervalIndex = setInterval(function () {
         $.ajax({
             url: 'http://99task.club/tasks/task/taskhall',

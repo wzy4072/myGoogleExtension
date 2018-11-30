@@ -31,10 +31,10 @@ var vue = new Vue({
     },
     methods: {
         start() {
-            sendMessageToContentScript({ start: true, message: '启动运行'}, (response) => { });
+            sendMessageToContentScript({ start: true, message: '启动运行' }, (response) => { });
         },
         stop() {
-            sendMessageToContentScript({ start: false, message: '停止运行'}, (response) => { });
+            sendMessageToContentScript({ start: false, message: '停止运行' }, (response) => { });
         },
         save() {
             chrome.storage.local.set({ 'baselimt': this.searchList })
@@ -45,9 +45,9 @@ var vue = new Vue({
             })
         },
         minus(index) {
-            this.searchList.splice(index,1)
+            this.searchList.splice(index, 1)
         },
-        add () {
+        add() {
             this.searchList.push('')
         }
     }

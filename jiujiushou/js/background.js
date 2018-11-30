@@ -1,5 +1,10 @@
 // 监听来自content-script的消息
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+
+    var audio = document.createElement('audio')
+    audio.src =  chrome.extension.getURL('js/1.mp3');
+    audio.play()
+
     chrome.notifications.create(null, {
         type: 'basic',
         iconUrl: '../images/icon.png',

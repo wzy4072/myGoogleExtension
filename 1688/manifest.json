@@ -41,5 +41,6 @@
         "storage",
         "http://*/*",
         "https://*/*"
-    ]
+    ],
+	"web_accessible_resources": ["js/inject.js","js/download.js"]
 }

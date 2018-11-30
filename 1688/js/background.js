@@ -20,60 +20,59 @@
 //     }
 // ]
 
-function run() {
-    getTabs()
-}
-
 var dataStor = {
-    fromIP: 'https://www.jianshu.com',
-    toIP: 'https://blog.csdn.net',
+    fromIP: 'https://detail.1688.com',
+    toIP: 'https://item.publish.taobao.com/sell/publish.htm',
     fromId: null,
     toId: null
 }
+// 运行
+function run() {
+    getTabs()
+}
+// 粘贴sku
+function pasteSku() {
+    chrome.tabs.sendMessage(dataStor.toId, { name: 'pasteSku' }, function (response) { })
+}
+
+
 
 // 获取当前窗口 所有tab
 function getTabs(callback) {
     chrome.tabs.query({ currentWindow: true }, function (tabs) {
-        if (callback) callback(tabs)
-        checkGoal(tabs)
+        // 检测两个窗口是否打开 
+        dataStor.fromId = null
+        dataStor.toId = null
+        tabs.map(tab => {
+            if (tab.url.indexOf(dataStor.fromIP) !== -1) { dataStor.fromId = tab.id }
+            if (tab.url.indexOf(dataStor.toIP) !== -1) { dataStor.toId = tab.id }
+        })
+        if (!dataStor.fromId) { throwNotifi('没有打开' + dataStor.fromIP); return false }
+        if (!dataStor.toId) { throwNotifi('没有打开' + dataStor.toIP) }
+        // alert('background发出->content：collect')
+        chrome.tabs.sendMessage(dataStor.fromId, { name: 'collect' }, function (response) { })
     })
 }
-// 检测两个操作对象
-function checkGoal(tabs) {
-    dataStor.fromId = null
-    dataStor.toId = null
-    tabs.map(tab => {
-        if (tab.url.indexOf(dataStor.fromIP) !== -1) { dataStor.fromId = tab.id }
-        if (tab.url.indexOf(dataStor.toIP) !== -1) { dataStor.toId = tab.id }
-    })
-    if (!dataStor.fromId) { throwNotifi('没有打开' + dataStor.fromIP); return false }
-    if (!dataStor.toId) { throwNotifi('没有打开' + dataStor.toIP) }
-    callToCollect()
-}
-
-function callToCollect() {
-    // alert('callToCollect' + dataStor.fromId)
-    sendMessage(dataStor.fromId, { task: 'collect', })
-}
 
 
-
-var bgTasks = {
-    paste: function (info) {
-        throwNotifi(JSON.stringify(info))
-    }
-}
-
-// 监听来自content-script的消息
+// 监听来自content-script的消息 并执行任务库中指定任务
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-    bgTasks[request.task](request.info)
+    if (request.name === 'collectResult') {
+        // alert('background收到->contentA:collectResult-> contentB：paste')
+        chrome.tabs.sendMessage(dataStor.toId, { name: 'paste', info: request }, function (response) { })
+    }
+    if (request.name === 'pasteResult') {
+        // alert('background收到->contentB：pasteResult')
+        throwNotifi(request)
+    }
 });
-// 给 content-script发送消息
-function sendMessage(tabId, message) {
-    chrome.tabs.sendMessage(tabId, message, function (response) { })
-}
 
+/**
+ * 窗口弹出消息
+ * @param {*} msg 
+ */
 function throwNotifi(msg) {
+    msg = JSON.stringify(msg)
     chrome.notifications.create(null, {
         type: 'basic',
         iconUrl: '../img/icon.png',
@@ -81,6 +80,7 @@ function throwNotifi(msg) {
         message: msg || '消息！'
     });
 }
+
 
 // 获取当前窗口 当前tab
 // function getCurrentTabId(callback) {
